@@ -1,9 +1,12 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id 'java'
-    id 'maven-publish'
+    id "com.vanniktech.maven.publish" version "0.28.0"
+    id 'signing'
 }
 
-group = 'com.github.k6mt'
+group = 'io.github.k6mt'
 version = '0.0.1'
 
 java {
@@ -12,22 +15,48 @@ java {
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = "com.github.k6mt"
-            artifactId = "surfer"
-            version = "0.0.1"
-            from(components["java"])
-        }
-    }
-    repositories {
-        mavenLocal()
-    }
-}
-
 repositories {
     mavenCentral()
+}
+
+signing {
+    useGpgCmd()
+    sign publishing.publications
+}
+mavenPublishing {
+//    signAllPublications()
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    coordinates("io.github.k6mt", "test", "0.0.1")
+
+
+    // POM 설정
+    pom {
+        name = 'test'
+        description = 'SpringBoot test Library'
+        url = '<https://github.com/k6mt/test>'
+
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+
+        developers {
+            developer {
+                id = 'jjoonior'
+                name = 'Injoo Huh'
+                email = 'jjoonior97@gmail.com'
+            }
+        }
+
+        scm {
+            connection = 'scm:git:github.com/k6mt/test.git'
+            developerConnection = 'scm:git:ssh://github.com/k6mt/test.git'
+            url = '<https://github.com/k6mt/test/tree/develop>'
+        }
+    }
 }
 
 dependencies {
