@@ -20,11 +20,10 @@ repositories {
 }
 
 signing {
-    useGpgCmd()
     sign publishing.publications
 }
 mavenPublishing {
-//    signAllPublications()
+    signAllPublications()
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     coordinates("io.github.k6mt", "test", "0.0.1")
 
@@ -126,4 +125,9 @@ tasks.register("copyBuildFiles", Copy) {
     into("$projectDir/src/main/resources/META-INF/resources/k6m-surfer")
 }
 
+afterEvaluate {
+    tasks.named("sourcesJar") {
+        dependsOn("copyBuildFiles")
+    }
+}
 
